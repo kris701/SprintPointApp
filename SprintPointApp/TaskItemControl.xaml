@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="SprintPointApp.TaskItemControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SprintPointApp"
+             mc:Ignorable="d">
+    <StackPanel Orientation="Horizontal">
+        <Label x:Name="TaskType" Content="Type" Width="75"/>
+        <GridSplitter Width="2"/>
+        <Label x:Name="TaskID" Content="ID" Width="75"/>
+        <GridSplitter Width="2"/>
+        <Label x:Name="TaskName" Content="Task Name" Width="200"/>
+        <GridSplitter Width="2"/>
+        <Label x:Name="TaskPoints" Content="0" Width="25"/>
+        <GridSplitter Width="2"/>
+        <Label x:Name="StatusLabel" Content="unknown" Width="100"/>
+        <GridSplitter Width="2"/>
+        <Label x:Name="SprintLabel" Content="-" Width="100"/>
+        <GridSplitter Width="2"/>
+        <Label x:Name="RelationUp" Content="-" Width="200"/>
+        <GridSplitter Width="2"/>
+        <Label x:Name="RelationDown" Content="-" Width="200"/>
+    </StackPanel>
+</UserControl>

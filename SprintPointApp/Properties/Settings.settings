@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="SprintPointApp.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="APIToken" Type="System.String" Scope="User">
+      <Value Profile="(Default)">pk_10932097_H0C6MH8U0X5S5PDPHEFHB9ZVP2FG9W2N</Value>
+    </Setting>
+    <Setting Name="APIRoute" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://api.clickup.com/api/v2</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
