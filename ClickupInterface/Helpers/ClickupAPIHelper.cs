@@ -113,7 +113,7 @@ namespace ClickupInterface.Helpers
             return returnList;
         }
 
-        public async Task<List<TaskItem>> GetViewTasks(string viewID)
+        public async Task<List<TaskItem>> GetViewTasks(string viewID, int page = 0)
         {
             List<TaskItem> returnList = new List<TaskItem>();
             APIClient<string, Empty> aPIClient = new APIClient<string, Empty>(BaseURL, $"view/{viewID}/task?page=0", Token);
@@ -125,6 +125,8 @@ namespace ClickupInterface.Helpers
             {
                 returnList.Add(TaskFormatter(arrayElement));
             }
+            if (returnList.Count >= 30)
+                returnList.AddRange(await GetViewTasks(viewID, page + 1));
             return returnList;
         }
 

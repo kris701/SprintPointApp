@@ -31,6 +31,8 @@ namespace ClickupInterface
         public string Token { get; }
         public string BaseURL { get; }
 
+        public void PurgeTaskLists();
+
         public Task<string> GetTeamID();
         public Task<string> GetDeveloperSpace();
 

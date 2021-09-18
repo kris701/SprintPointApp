@@ -34,13 +34,32 @@ namespace ClickupInterface
 
         public string Token { get; internal set; }
         public string BaseURL { get; internal set; }
-#endregion
+        #endregion
 
         public ClickupInterface(string token, string baseURL)
         {
             Token = token;
             BaseURL = baseURL;
             apiHelper = new ClickupAPIHelper(token,baseURL);
+        }
+
+        public void PurgeTaskLists()
+        {
+            if (EpicTasks != null)
+            {
+                EpicTasks.Clear();
+                EpicTasks = null;
+            }
+            if (PBITasks != null)
+            {
+                PBITasks.Clear();
+                PBITasks = null;
+            }
+            if (TaskTasks != null)
+            {
+                TaskTasks.Clear();
+                TaskTasks = null;
+            }
         }
 
         #region Overall Calls

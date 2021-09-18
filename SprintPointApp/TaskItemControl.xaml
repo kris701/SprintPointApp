@@ -16,7 +16,7 @@
         <GridSplitter Width="2"/>
         <Label x:Name="StatusLabel" Content="Status" Width="100"/>
         <GridSplitter Width="2"/>
-        <Label x:Name="SprintLabel" Content="Sprint IDs" Width="100"/>
+        <Label x:Name="SprintLabel" Content="Sprints" Width="150"/>
         <GridSplitter Width="2"/>
         <Label x:Name="RelationUp" Content="Up Relations" Width="200"/>
         <GridSplitter Width="2"/>
