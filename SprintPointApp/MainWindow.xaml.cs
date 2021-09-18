@@ -12,8 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Text;
-using System.Text.Json;
 using ClickupInterface.Models;
 
 namespace SprintPointApp
@@ -36,9 +34,10 @@ namespace SprintPointApp
             List<TaskItem> items = new List<TaskItem>();
 
             items.AddRange(await clickupInterface.GetTaskTasks());
-            await clickupInterface.BindSprints(items);
             items.AddRange(await clickupInterface.GetEpicTasks());
             items.AddRange(await clickupInterface.GetPBITasks());
+
+            await clickupInterface.BindSprints(items);
 
             foreach (TaskItem item in items)
             {
