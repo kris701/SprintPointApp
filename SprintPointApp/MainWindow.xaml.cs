@@ -41,6 +41,9 @@ namespace SprintPointApp
 
             foreach (TaskItem item in items)
             {
+                string sprints = "-";
+                if (item.Sprints != null)
+                    sprints = ConvertListToString(item.Sprints.Select(x => x.Name).ToList());
                 TaskItemControl newControl = new TaskItemControl(
                     item.ID,
                     item.Name, 
@@ -49,7 +52,7 @@ namespace SprintPointApp
                     item.Type.ToString(), 
                     ConvertListToString(item.UpRelations),
                     ConvertListToString(item.DownRelations),
-                    ConvertListToString(item.Sprints)
+                    sprints
                     );
 
                 SprintItemsPanel.Children.Add(newControl);

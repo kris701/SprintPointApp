@@ -23,7 +23,7 @@ namespace ClickupInterface
         public string TasksListID { get; internal set; }
         public string SprintListID { get; internal set; }
 
-        public List<string> SprintIDs { get; internal set; }
+        public List<SprintModel> Sprints { get; internal set; }
 
         public List<TaskItem> EpicTasks { get; internal set; }
         public List<TaskItem> PBITasks { get; internal set; }
@@ -126,13 +126,13 @@ namespace ClickupInterface
             return TasksListID;
         }
 
-        public async Task<List<string>> GetSprintLists()
+        public async Task<List<SprintModel>> GetSprints()
         {
             if (SprintFolderID == null)
                 SprintFolderID = await GetSprintFolder();
-            if (SprintIDs == null)
-                SprintIDs = await apiHelper.GetLists(SprintFolderID);
-            return SprintIDs;
+            if (Sprints == null)
+                Sprints = await apiHelper.GetSprints(SprintFolderID);
+            return Sprints;
         }
 
         #endregion
@@ -169,17 +169,21 @@ namespace ClickupInterface
 
         public async Task BindSprints(List<TaskItem> tasks)
         {
-            if (SprintIDs == null)
-                SprintIDs = await GetSprintLists();
-            foreach(string sprintListID in SprintIDs)
+            if (Sprints == null)
+                Sprints = await GetSprints();
+            foreach(SprintModel sprint in Sprints)
             {
-                List<TaskItem> sprintItems = await apiHelper.GetListTasks(sprintListID);
+                List<TaskItem> sprintItems = await apiHelper.GetViewTasks(sprint.ViewID);
                 foreach(TaskItem task in tasks)
                 {
                     foreach (TaskItem sprintTask in sprintItems)
                     {
                         if (task.ID == sprintTask.ID)
-                            task.Sprints.Add(sprintListID);
+                        {
+                            if (task.Sprints == null)
+                                task.Sprints = new List<SprintModel>();
+                            task.Sprints.Add(sprint);
+                        }
                     }
                 }
             }

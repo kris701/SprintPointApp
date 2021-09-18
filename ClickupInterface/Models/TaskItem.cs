@@ -17,7 +17,7 @@ namespace ClickupInterface.Models
         public List<string> DownRelations { get; set; }
         public string SprintPoints { get; set; }
         public string Status { get; set; }
-        public List<string> Sprints { get; set; }
+        public List<SprintModel> Sprints { get; set; }
 
         public void AddDependency(string dependencyID, string type)
         {

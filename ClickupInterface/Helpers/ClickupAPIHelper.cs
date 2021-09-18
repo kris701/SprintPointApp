@@ -70,6 +70,23 @@ namespace ClickupInterface.Helpers
             return "";
         }
 
+        public async Task<List<SprintModel>> GetSprints(string folderID)
+        {
+            List<SprintModel> returnList = new List<SprintModel>();
+            APIClient<string, Empty> aPIClient = new APIClient<string, Empty>(BaseURL, $"folder/{folderID}/list", Token);
+            string response = await aPIClient.HTTPGet();
+            JsonDocument json = JsonDocument.Parse(response);
+            JsonElement root = json.RootElement;
+            JsonElement array = root.GetProperty("lists");
+            foreach (JsonElement arrayElement in array.EnumerateArray())
+                returnList.Add(new SprintModel() { 
+                    SprintID = arrayElement.GetProperty("id").GetString(),
+                    Name = arrayElement.GetProperty("name").GetString(),
+                    ViewID = await GetListView(arrayElement.GetProperty("id").GetString())
+                });
+            return returnList;
+        }
+
         public async Task<List<string>> GetLists(string folderID)
         {
             List<string> returnList = new List<string>();
@@ -83,6 +100,17 @@ namespace ClickupInterface.Helpers
             return returnList;
         }
 
+        public async Task<string> GetListView(string listID)
+        {
+            APIClient<string, Empty> aPIClient = new APIClient<string, Empty>(BaseURL, $"list/{listID}/view", Token);
+            string response = await aPIClient.HTTPGet();
+            JsonDocument json = JsonDocument.Parse(response);
+            JsonElement root = json.RootElement;
+            JsonElement reqViews = root.GetProperty("required_views");
+            JsonElement list = reqViews.GetProperty("list");
+            return list.GetProperty("id").GetString();
+        }
+
         public async Task<List<TaskItem>> GetListTasks(string listID)
         {
             List<TaskItem> returnList = new List<TaskItem>();
@@ -93,36 +121,56 @@ namespace ClickupInterface.Helpers
             JsonElement array = root.GetProperty("tasks");
             foreach (JsonElement arrayElement in array.EnumerateArray())
             {
-                string tagName = "";
-                if (arrayElement.GetProperty("tags").GetArrayLength() > 0)
-                    tagName = arrayElement.GetProperty("tags")[0].GetProperty("name").GetRawText();
-
-                TaskItem newItem = new TaskItem()
-                {
-                    ID = arrayElement.GetProperty("id").GetRawText(),
-                    Name = arrayElement.GetProperty("name").GetRawText(),
-                    SprintPoints = arrayElement.GetProperty("points").GetRawText(),
-                    Status = arrayElement.GetProperty("status").GetProperty("status").GetRawText(),
-                    Type = TaskTypeConverter.GetTypeFromString(tagName)
-                };
-
-                JsonElement dependencyArray = arrayElement.GetProperty("dependencies");
-                if (dependencyArray.GetArrayLength() > 0)
-                {
-                    foreach (JsonElement element in dependencyArray.EnumerateArray())
-                    {
-                        string taskID = element.GetProperty("task_id").GetRawText();
-                        string dependID = element.GetProperty("depends_on").GetRawText();
-                        if (taskID != newItem.ID)
-                            newItem.AddDependency(taskID, "1");
-                        else
-                            newItem.AddDependency(dependID, "0");
-                    }
-                }
-
-                returnList.Add(newItem);
+                returnList.Add(TaskFormatter(arrayElement));
             }
             return returnList;
+        }
+
+        public async Task<List<TaskItem>> GetViewTasks(string viewID)
+        {
+            List<TaskItem> returnList = new List<TaskItem>();
+            APIClient<string, Empty> aPIClient = new APIClient<string, Empty>(BaseURL, $"view/{viewID}/task?page=0", Token);
+            string response = await aPIClient.HTTPGet();
+            JsonDocument json = JsonDocument.Parse(response);
+            JsonElement root = json.RootElement;
+            JsonElement array = root.GetProperty("tasks");
+            foreach (JsonElement arrayElement in array.EnumerateArray())
+            {
+                returnList.Add(TaskFormatter(arrayElement));
+            }
+            return returnList;
+        }
+
+        private TaskItem TaskFormatter(JsonElement element)
+        {
+            string tagName = "";
+            if (element.GetProperty("tags").GetArrayLength() > 0)
+                tagName = element.GetProperty("tags")[0].GetProperty("name").GetString();
+
+            TaskItem newItem = new TaskItem()
+            {
+                ID = element.GetProperty("id").GetString(),
+                Name = element.GetProperty("name").GetString(),
+                SprintPoints = element.GetProperty("points").GetRawText().Replace("\"",""),
+                Status = element.GetProperty("status").GetProperty("status").GetString(),
+                Type = TaskTypeConverter.GetTypeFromString(tagName)
+            };
+
+            JsonElement dependencyArray = element.GetProperty("dependencies");
+            if (dependencyArray.GetArrayLength() > 0)
+            {
+                foreach (JsonElement depElement in dependencyArray.EnumerateArray())
+                {
+                    string taskID = depElement.GetProperty("task_id").GetString();
+                    string dependID = depElement.GetProperty("depends_on").GetString();
+                    if (taskID != newItem.ID)
+                        newItem.AddDependency(taskID, "1");
+                    else
+                        newItem.AddDependency(dependID, "0");
+                }
+            }
+
+            return newItem;
         }
     }
 }
