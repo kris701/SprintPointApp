@@ -70,6 +70,19 @@ namespace ClickupInterface.Helpers
             return "";
         }
 
+        public async Task<List<string>> GetLists(string folderID)
+        {
+            List<string> returnList = new List<string>();
+            APIClient<string, Empty> aPIClient = new APIClient<string, Empty>(BaseURL, $"folder/{folderID}/list", Token);
+            string response = await aPIClient.HTTPGet();
+            JsonDocument json = JsonDocument.Parse(response);
+            JsonElement root = json.RootElement;
+            JsonElement array = root.GetProperty("lists");
+            foreach (JsonElement arrayElement in array.EnumerateArray())
+                returnList.Add(arrayElement.GetProperty("id").GetString());
+            return returnList;
+        }
+
         public async Task<List<TaskItem>> GetListTasks(string listID)
         {
             List<TaskItem> returnList = new List<TaskItem>();
@@ -106,11 +119,6 @@ namespace ClickupInterface.Helpers
                             newItem.AddDependency(dependID, "0");
                     }
                 }
-
-                JsonElement listArray = arrayElement.GetProperty("list");
-                string listName = listArray.GetProperty("name").GetRawText().ToUpper();
-                if (listName.Contains("SPRINT"))
-                    newItem.SprintID = listArray.GetProperty("id").GetRawText();
 
                 returnList.Add(newItem);
             }

@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SprintPointApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="800">
+        Title="MainWindow" Height="500" Width="1200" Loaded="Window_Loaded">
     <StackPanel>
         <Button x:Name="GetSprintPointsButton" Content="Get Sprint Points" Click="GetSprintPointsButton_Click"/>
+        <local:TaskItemControl x:Name="HeaderItem"/>
         <ScrollViewer Height="465" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
             <StackPanel x:Name="SprintItemsPanel" CanHorizontallyScroll="True">
             

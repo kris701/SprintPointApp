@@ -34,24 +34,11 @@ namespace SprintPointApp
 
             ClickupInterface.ClickupInterface clickupInterface = new ClickupInterface.ClickupInterface(Properties.Settings.Default.APIToken, Properties.Settings.Default.APIRoute);
             List<TaskItem> items = new List<TaskItem>();
-            TaskItemControl defControl = new TaskItemControl(
-                "ID",
-                "Name",
-                "Sprint Points",
-                "Status",
-                "Type",
-                "Up Relations",
-                "Down Relations",
-                "Sprint ID"
-                );
 
-            SprintItemsPanel.Children.Add(defControl);
-            await Task.Delay(100);
-            this.Width = defControl.ActualWidth;
-
+            items.AddRange(await clickupInterface.GetTaskTasks());
+            await clickupInterface.BindSprints(items);
             items.AddRange(await clickupInterface.GetEpicTasks());
             items.AddRange(await clickupInterface.GetPBITasks());
-            items.AddRange(await clickupInterface.GetTaskTasks());
 
             foreach (TaskItem item in items)
             {
@@ -63,7 +50,7 @@ namespace SprintPointApp
                     item.Type.ToString(), 
                     ConvertListToString(item.UpRelations),
                     ConvertListToString(item.DownRelations),
-                    item.SprintID
+                    ConvertListToString(item.Sprints)
                     );
 
                 SprintItemsPanel.Children.Add(newControl);
@@ -87,6 +74,11 @@ namespace SprintPointApp
                 }
             }
             return outString;
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.Width = HeaderItem.ActualWidth;
         }
     }
 }

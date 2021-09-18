@@ -12,14 +12,14 @@
         <GridSplitter Width="2"/>
         <Label x:Name="TaskName" Content="Task Name" Width="200"/>
         <GridSplitter Width="2"/>
-        <Label x:Name="TaskPoints" Content="0" Width="25"/>
+        <Label x:Name="TaskPoints" Content="Points" Width="50"/>
         <GridSplitter Width="2"/>
-        <Label x:Name="StatusLabel" Content="unknown" Width="100"/>
+        <Label x:Name="StatusLabel" Content="Status" Width="100"/>
         <GridSplitter Width="2"/>
-        <Label x:Name="SprintLabel" Content="-" Width="100"/>
+        <Label x:Name="SprintLabel" Content="Sprint IDs" Width="100"/>
         <GridSplitter Width="2"/>
-        <Label x:Name="RelationUp" Content="-" Width="200"/>
+        <Label x:Name="RelationUp" Content="Up Relations" Width="200"/>
         <GridSplitter Width="2"/>
-        <Label x:Name="RelationDown" Content="-" Width="200"/>
+        <Label x:Name="RelationDown" Content="Down Relations" Width="200"/>
     </StackPanel>
 </UserControl>
