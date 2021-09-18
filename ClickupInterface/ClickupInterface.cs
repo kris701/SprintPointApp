@@ -8,8 +8,11 @@ using System.Threading.Tasks;
 
 namespace ClickupInterface
 {
-    public class ClickupInterface
+    public class ClickupInterface : IClickupInterface
     {
+        private ClickupAPIHelper apiHelper;
+
+        #region Properties
         public string TeamID { get; internal set; }
         public string SpaceID { get; internal set; }
 
@@ -29,9 +32,9 @@ namespace ClickupInterface
         public List<TaskItem> PBITasks { get; internal set; }
         public List<TaskItem> TaskTasks { get; internal set; }
 
-        public string Token { get; set; }
-        public string BaseURL { get; set; }
-        private ClickupAPIHelper apiHelper;
+        public string Token { get; internal set; }
+        public string BaseURL { get; internal set; }
+#endregion
 
         public ClickupInterface(string token, string baseURL)
         {

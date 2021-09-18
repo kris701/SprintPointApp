@@ -8,7 +8,7 @@ using System.Net;
 using System.IO;
 using System.Security;
 
-namespace ClickupInterface
+namespace ClickupInterface.Helpers
 {
     internal class Empty { }
 

@@ -12,8 +12,8 @@ namespace ClickupInterface.Helpers
 {
     internal class ClickupAPIHelper
     {
-        public string Token { get; set; }
-        public string BaseURL { get; set; }
+        public string Token { get; internal set; }
+        public string BaseURL { get; internal set; }
 
         public ClickupAPIHelper(string token, string baseURL)
         {
@@ -84,19 +84,6 @@ namespace ClickupInterface.Helpers
                     Name = arrayElement.GetProperty("name").GetString(),
                     ViewID = await GetListView(arrayElement.GetProperty("id").GetString())
                 });
-            return returnList;
-        }
-
-        public async Task<List<string>> GetLists(string folderID)
-        {
-            List<string> returnList = new List<string>();
-            APIClient<string, Empty> aPIClient = new APIClient<string, Empty>(BaseURL, $"folder/{folderID}/list", Token);
-            string response = await aPIClient.HTTPGet();
-            JsonDocument json = JsonDocument.Parse(response);
-            JsonElement root = json.RootElement;
-            JsonElement array = root.GetProperty("lists");
-            foreach (JsonElement arrayElement in array.EnumerateArray())
-                returnList.Add(arrayElement.GetProperty("id").GetString());
             return returnList;
         }
 
