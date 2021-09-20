@@ -125,7 +125,7 @@ namespace ClickupInterface.Helpers
             {
                 returnList.Add(TaskFormatter(arrayElement));
             }
-            if (returnList.Count >= 30)
+            if (!root.GetProperty("last_page").GetBoolean())
                 returnList.AddRange(await GetViewTasks(viewID, page + 1));
             return returnList;
         }
