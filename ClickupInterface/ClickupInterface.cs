@@ -193,22 +193,52 @@ namespace ClickupInterface
         {
             if (Sprints == null)
                 Sprints = await GetSprints();
+
+            List<TaskItem> addToTasks = new List<TaskItem>();
+
             foreach(SprintModel sprint in Sprints)
             {
                 List<TaskItem> sprintItems = await apiHelper.GetViewTasks(sprint.ViewID);
-                foreach(TaskItem task in tasks)
+                bool found = false;
+                foreach(TaskItem sprintTask in sprintItems)
                 {
-                    foreach (TaskItem sprintTask in sprintItems)
+                    found = false;
+                    foreach (TaskItem task in tasks)
                     {
                         if (task.ID == sprintTask.ID)
                         {
+                            found = true;
                             if (task.Sprints == null)
                                 task.Sprints = new List<SprintModel>();
                             task.Sprints.Add(sprint);
                         }
                     }
+                    if (!found)
+                    {
+                        addToTasks.Add(sprintTask);
+                        if (sprintTask.Sprints == null)
+                            sprintTask.Sprints = new List<SprintModel>();
+                        sprintTask.Sprints.Add(sprint);
+                    }
                 }
             }
+
+            tasks.AddRange(addToTasks);
+        }
+
+        public async Task<List<TaskItem>> GetAndBindAllTasks()
+        {
+            PurgeTaskLists();
+
+            List<TaskItem> items = new List<TaskItem>();
+
+            items.AddRange(await GetTaskTasks());
+            items.AddRange(await GetEpicTasks());
+            items.AddRange(await GetPBITasks());
+
+            await BindSprints(items);
+
+            return items;
         }
     }
 }

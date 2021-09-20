@@ -51,5 +51,7 @@ namespace ClickupInterface
         public Task<List<TaskItem>> GetTaskTasks();
 
         public Task BindSprints(List<TaskItem> tasks);
+
+        public Task<List<TaskItem>> GetAndBindAllTasks();
     }
 }

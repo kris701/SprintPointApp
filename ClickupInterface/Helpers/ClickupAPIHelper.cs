@@ -116,7 +116,7 @@ namespace ClickupInterface.Helpers
         public async Task<List<TaskItem>> GetViewTasks(string viewID, int page = 0)
         {
             List<TaskItem> returnList = new List<TaskItem>();
-            APIClient<string, Empty> aPIClient = new APIClient<string, Empty>(BaseURL, $"view/{viewID}/task?page=0", Token);
+            APIClient<string, Empty> aPIClient = new APIClient<string, Empty>(BaseURL, $"view/{viewID}/task?page={page}", Token);
             string response = await aPIClient.HTTPGet();
             JsonDocument json = JsonDocument.Parse(response);
             JsonElement root = json.RootElement;
