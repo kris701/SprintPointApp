@@ -57,6 +57,20 @@ namespace ClickupInterface.Helpers
             return "";
         }
 
+        public async Task<List<string>> GetFolderByStartsWithName(string spaceID, string name)
+        {
+            List<string> returnList = new List<string>();
+            APIClient<string, Empty> aPIClient = new APIClient<string, Empty>(BaseURL, $"space/{spaceID}/folder", Token);
+            string response = await aPIClient.HTTPGet();
+            JsonDocument json = JsonDocument.Parse(response);
+            JsonElement root = json.RootElement;
+            JsonElement array = root.GetProperty("folders");
+            foreach (JsonElement arrayElement in array.EnumerateArray())
+                if (arrayElement.GetProperty("name").GetString().StartsWith(name))
+                    returnList.Add(arrayElement.GetProperty("id").GetString());
+            return returnList;
+        }
+
         public async Task<string> GetListByName(string folderID, string name)
         {
             APIClient<string, Empty> aPIClient = new APIClient<string, Empty>(BaseURL, $"folder/{folderID}/list", Token);

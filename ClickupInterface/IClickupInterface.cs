@@ -15,12 +15,11 @@ namespace ClickupInterface
         public string EpicFolderID { get; }
         public string PBIFolderID { get; }
         public string TasksFolderID { get; }
-        public string SprintFolderID { get; }
+        public List<string> SprintFolderIDs { get; }
 
         public string EpicListID { get; }
         public string PBIListID { get; }
         public string TasksListID { get; }
-        public string SprintListID { get; }
 
         public List<SprintModel> Sprints { get; }
 
@@ -39,7 +38,7 @@ namespace ClickupInterface
         public Task<string> GetEpicFolder();
         public Task<string> GetPBIFolder();
         public Task<string> GetTasksFolder();
-        public Task<string> GetSprintFolder();
+        public Task<List<string>> GetSprintFolders();
 
         public Task<string> GetEpicList();
         public Task<string> GetPBIList();

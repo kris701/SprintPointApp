@@ -19,12 +19,11 @@ namespace ClickupInterface
         public string EpicFolderID { get; internal set; }
         public string PBIFolderID { get; internal set; }
         public string TasksFolderID { get; internal set; }
-        public string SprintFolderID { get; internal set; }
+        public List<string> SprintFolderIDs { get; internal set; }
 
         public string EpicListID { get; internal set; }
         public string PBIListID { get; internal set; }
         public string TasksListID { get; internal set; }
-        public string SprintListID { get; internal set; }
 
         public List<SprintModel> Sprints { get; internal set; }
 
@@ -108,13 +107,13 @@ namespace ClickupInterface
             return TasksFolderID;
         }
 
-        public async Task<string> GetSprintFolder()
+        public async Task<List<string>> GetSprintFolders()
         {
             if (SpaceID == null)
                 SpaceID = await GetDeveloperSpace();
-            if (SprintFolderID == null)
-                SprintFolderID = await apiHelper.GetFolderByName(SpaceID, "Sprint");
-            return SprintFolderID;
+            if (SprintFolderIDs == null)
+                SprintFolderIDs = await apiHelper.GetFolderByStartsWithName(SpaceID, "Sprint");
+            return SprintFolderIDs;
         }
 
         #endregion
@@ -150,10 +149,14 @@ namespace ClickupInterface
 
         public async Task<List<SprintModel>> GetSprints()
         {
-            if (SprintFolderID == null)
-                SprintFolderID = await GetSprintFolder();
+            if (SprintFolderIDs == null)
+                SprintFolderIDs = await GetSprintFolders();
             if (Sprints == null)
-                Sprints = await apiHelper.GetSprints(SprintFolderID);
+            {
+                Sprints = new List<SprintModel>();
+                foreach(string sprintFolderID in SprintFolderIDs)
+                    Sprints.AddRange(await apiHelper.GetSprints(sprintFolderID));
+            }
             return Sprints;
         }
 
